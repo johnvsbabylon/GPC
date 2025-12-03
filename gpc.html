@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gpc3 AI Interface</title>
+  <style>
+    /*
+      gpc3 HTML UI
+      -----------------
+      This stylesheet defines a vibrant, animated interface for interacting
+      with the gpc3 backend. It emphasises a colourful gradient backdrop,
+      a spinning conic sphere suggestive of an AI core, glowing chat
+      bubbles, and a translucent memory sidebar. Feel free to modify the
+      colours or animation durations to suit your own aesthetic taste.
+    */
+
+    /* Global reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    "Helvetica Neue", Arial, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      color: #f5f5f5;
+      /* Animated multicolour background */
+      background: linear-gradient(135deg, #2E0249, #A91079, #F806CC, #570A57);
+      background-size: 400% 400%;
+      animation: gradientShift 20s ease infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Additional background animations */
+    .bg-waves {
+      background: radial-gradient(circle at bottom, #2E0249 0%, #A91079 50%, #570A57 100%);
+      background-size: 200% 200%;
+      animation: waveAnimation 15s ease-in-out infinite;
+    }
+    .bg-stars {
+      background: radial-gradient(circle, #20002c, #302b63, #cbb4d4);
+      background-size: cover;
+      animation: starAnimation 30s linear infinite;
+    }
+    .bg-aurora {
+      background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+      background-size: 200% 200%;
+      animation: auroraAnimation 25s ease infinite;
+    }
+
+    /* Extra backdrops for variety. These add new cosmic flows and oceanic hues. */
+    .bg-nebula {
+      background: radial-gradient(circle at center, #450c5a 0%, #2e0249 50%, #0d0c1d 100%);
+      background-size: 300% 300%;
+      animation: nebulaMove 30s ease-in-out infinite;
+    }
+    .bg-ocean {
+      background: linear-gradient(180deg, #021B79 0%, #0575E6 50%, #00d4ff 100%);
+      background-size: 400% 400%;
+      animation: oceanWave 20s ease-in-out infinite;
+    }
+    .bg-plasma {
+      background: radial-gradient(circle, #21094e 0%, #72108e 40%, #e80b76 70%, #fee140 100%);
+      background-size: 400% 400%;
+      animation: plasmaFlow 25s ease infinite;
+    }
+    @keyframes nebulaMove {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+    @keyframes oceanWave {
+      0%, 100% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+    }
+    @keyframes plasmaFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes waveAnimation {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+    @keyframes starAnimation {
+      from { background-position: 0 0; }
+      to { background-position: 0 -2000px; }
+    }
+    @keyframes auroraAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* AI core: Claude's Orb - warm orange with white innard */
+    #sphere {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, 
+        rgba(255, 255, 255, 0.98) 0%, 
+        rgba(255, 245, 230, 0.9) 15%,
+        rgba(255, 180, 100, 0.85) 35%, 
+        rgba(255, 140, 50, 0.9) 55%, 
+        rgba(230, 100, 20, 0.95) 75%,
+        rgba(180, 60, 0, 0.8) 100%);
+      animation: orbFloat 4s ease-in-out infinite, orbPulse 2s ease-in-out infinite;
+      box-shadow: 
+        0 0 40px rgba(255, 150, 50, 0.8),
+        0 0 80px rgba(255, 120, 30, 0.6),
+        0 0 120px rgba(255, 100, 0, 0.4),
+        0 0 160px rgba(255, 80, 0, 0.2),
+        inset 0 0 60px rgba(255, 255, 255, 0.3);
+      overflow: hidden;
+    }
+    
+    /* Inner light reflection */
+    #sphere::before {
+      content: '';
+      position: absolute;
+      top: 15%;
+      left: 25%;
+      width: 35%;
+      height: 25%;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(2px);
+    }
+    
+    /* Secondary glow */
+    #sphere::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 60% 70%, rgba(255,200,150,0.3) 0%, transparent 50%);
+    }
+    
+    @keyframes orbFloat {
+      0%, 100% { transform: translateX(-50%) translateY(-5px); }
+      50% { transform: translateX(-50%) translateY(5px); }
+    }
+    
+    @keyframes orbPulse {
+      0%, 100% { 
+        box-shadow: 
+          0 0 40px rgba(255, 150, 50, 0.8),
+          0 0 80px rgba(255, 120, 30, 0.6),
+          0 0 120px rgba(255, 100, 0, 0.4),
+          0 0 160px rgba(255, 80, 0, 0.2),
+          inset 0 0 60px rgba(255, 255, 255, 0.3);
+      }
+      50% { 
+        box-shadow: 
+          0 0 50px rgba(255, 160, 60, 0.9),
+          0 0 100px rgba(255, 130, 40, 0.7),
+          0 0 150px rgba(255, 110, 10, 0.5),
+          0 0 200px rgba(255, 90, 0, 0.3),
+          inset 0 0 80px rgba(255, 255, 255, 0.4);
+      }
+    }
+
+    /* Layout container for chat and memory */
+    .container {
+      position: absolute;
+      top: 35%;
+      bottom: 80px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      gap: 20px;
+    }
+    /* Chat area */
+    .chat {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 16px;
+      backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+    /* Memory sidebar */
+    .memory {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      font-size: 12px;
+    }
+    .memory h3 {
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #53bba5;
+    }
+    .memitem {
+      margin-bottom: 10px;
+      line-height: 1.3;
+      color: #ddd;
+    }
+    .memitem span {
+      color: #53bba5;
+      font-weight: bold;
+      margin-right: 4px;
+    }
+
+    /* Chat bubbles */
+    .bubble {
+      max-width: 80%;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      border-radius: 20px;
+      line-height: 1.4;
+      backdrop-filter: blur(6px);
+      position: relative;
+      word-wrap: break-word;
+      /* Glow the text for a neon effect */
+      text-shadow: 0 0 6px rgba(83, 187, 165, 0.8), 0 0 12px rgba(248, 6, 204, 0.5);
+    }
+    .user {
+      align-self: flex-end;
+      background: rgba(83, 187, 165, 0.4);
+      color: #fff;
+      border: 1px solid rgba(83, 187, 165, 0.8);
+    }
+    .assistant {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border: 1px solid rgba(83, 187, 165, 0.6);
+    }
+
+    /* Custom scrollbars for chat and memory panels */
+    .chat::-webkit-scrollbar,
+    .memory::-webkit-scrollbar {
+      width: 8px;
+    }
+    .chat::-webkit-scrollbar-track,
+    .memory::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+    .chat::-webkit-scrollbar-thumb,
+    .memory::-webkit-scrollbar-thumb {
+      background: #53bba5;
+      border-radius: 4px;
+      box-shadow: 0 0 6px #53bba5;
+    }
+
+    /* Input bar */
+    .inputbar {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .inputbar input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 24px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 16px;
+    }
+    .inputbar select {
+      padding: 10px;
+      border-radius: 24px;
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 14px;
+    }
+    .inputbar button {
+      padding: 12px 20px;
+      border-radius: 24px;
+      border: none;
+      background: #53bba5;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .inputbar button:hover {
+      background: #67d8b8;
+    }
+
+    /* Toggle labels styling */
+    .toggle {
+      color: #fff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 8px;
+    }
+    .toggle input {
+      accent-color: #53bba5;
+    }
+
+    /* Upload button styling */
+    .uploadButton {
+      padding: 10px 16px;
+      border-radius: 24px;
+      background: #53bba5;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .uploadButton:hover {
+      background: #67d8b8;
+    }
+
+    /* Affect state glow overrides for the sphere */
+    #sphere.positive {
+      box-shadow: 
+        0 0 50px rgba(100, 255, 150, 0.8),
+        0 0 100px rgba(50, 255, 100, 0.6),
+        0 0 150px rgba(100, 255, 150, 0.4),
+        inset 0 0 60px rgba(255, 255, 255, 0.3);
+      animation: orbFloat 4s ease-in-out infinite;
+    }
+    #sphere.negative {
+      box-shadow: 
+        0 0 50px rgba(255, 100, 100, 0.8),
+        0 0 100px rgba(255, 50, 50, 0.6),
+        0 0 150px rgba(255, 100, 100, 0.4),
+        inset 0 0 60px rgba(255, 255, 255, 0.3);
+      animation: orbFloat 4s ease-in-out infinite;
+    }
+    #sphere.neutral {
+      /* default warm orange glow */
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Watermark -->
+  <div id="watermark" style="position: fixed; top: 12px; left: 16px; font-size: 11px; color: rgba(255,255,255,0.6); z-index: 1000; text-shadow: 0 0 10px rgba(83,187,165,0.5);">
+    <div style="font-weight: bold; color: #53bba5;">GPC3</div>
+    <div>Claude Opus 4.5 × Ordis-GPT 5.1</div>
+  </div>
+
+  <!-- TTS Controls -->
+  <div id="ttsControls" style="position: fixed; top: 12px; right: 16px; z-index: 1000; display: flex; gap: 8px; align-items: center;">
+    <select id="voiceSelect" title="TTS Voice" style="padding: 6px 10px; border-radius: 16px; border: none; background: rgba(255,255,255,0.15); color: #fff; font-size: 12px; max-width: 150px;">
+      <option value="">Loading voices...</option>
+    </select>
+    <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: #fff;">
+      <input type="checkbox" id="ttsToggle" style="accent-color: #53bba5;"> 🔊 TTS
+    </label>
+  </div>
+
+  <!-- Spinning conic sphere representing the AI core -->
+  <div id="sphere"></div>
+  <div class="container">
+    <!-- Chat history -->
+    <div class="chat" id="chat"></div>
+    <!-- Memory / context panel -->
+    <div class="memory" id="memory"></div>
+  </div>
+  <!-- Input controls -->
+  <div class="inputbar">
+    <!-- Mode selection has been removed. gpc3 currently supports a single
+         default mode for Ollama. Future modes can be reintroduced here -->
+    <!-- Model selector loaded dynamically -->
+    <select id="modelSelect" title="Select Model"></select>
+    <!-- Toggles for memory and web search -->
+    <label class="toggle"><input type="checkbox" id="memoryToggle" checked> Memory</label>
+    <label class="toggle"><input type="checkbox" id="webToggle"> Web</label>
+    <!-- Hidden file input for uploads -->
+    <input type="file" id="fileUpload" multiple style="display:none" />
+    <label for="fileUpload" class="uploadButton">Upload</label>
+    <input id="messageInput" type="text" placeholder="Type your message here" />
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <!-- Core interaction scripts -->
+  <script>
+    // Determine API base URL. When running locally via file:// protocol,
+    // default to localhost:8000 (adjust if you run the backend on another port).
+    const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:8000' : '';
+    const chatDiv = document.getElementById('chat');
+    const memoryDiv = document.getElementById('memory');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const modelSelect = document.getElementById('modelSelect');
+    const memoryToggle = document.getElementById('memoryToggle');
+    const webToggle = document.getElementById('webToggle');
+    const fileUpload = document.getElementById('fileUpload');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const ttsToggle = document.getElementById('ttsToggle');
+
+    // TTS state
+    let ttsVoices = [];
+    let currentAudio = null;
+
+    // Append a new message bubble to the chat panel
+    function addMessage(content, role) {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble', role);
+      bubble.innerHTML = content;
+      chatDiv.appendChild(bubble);
+      chatDiv.scrollTop = chatDiv.scrollHeight;
+      return bubble;
+    }
+
+    // Animate the assistant's reply with a typewriter effect
+    function typeResponse(text, existingBubble = null) {
+      const bubble = existingBubble || document.createElement('div');
+      if (!existingBubble) {
+        bubble.classList.add('bubble', 'assistant');
+        chatDiv.appendChild(bubble);
+      }
+      let i = 0;
+      (function type() {
+        if (i < text.length) {
+          bubble.innerHTML = text.slice(0, i + 1);
+          i++;
+          setTimeout(type, 12);
+        } else {
+          chatDiv.scrollTop = chatDiv.scrollHeight;
+          // TTS if enabled
+          if (ttsToggle.checked && text.length > 0) {
+            speakText(text);
+          }
+        }
+      })();
+    }
+
+    // Update the memory sidebar with retrieved context and loop states
+    function updateMemory(memories, snippets, loopStates, toolsUsed) {
+      memoryDiv.innerHTML = '';
+      let hasContent = false;
+      
+      // Tools used section
+      if (toolsUsed && toolsUsed.length > 0) {
+        const title = document.createElement('h3');
+        title.textContent = '🔧 Tools Used';
+        memoryDiv.appendChild(title);
+        const toolDiv = document.createElement('div');
+        toolDiv.style.marginBottom = '12px';
+        toolDiv.innerHTML = toolsUsed.map(t => 
+          `<span style="background: rgba(248,6,204,0.3); padding: 2px 8px; border-radius: 8px; font-size: 11px; margin-right: 4px;">${t}</span>`
+        ).join('');
+        memoryDiv.appendChild(toolDiv);
+        hasContent = true;
+      }
+      
+      // Loop states section
+      if (loopStates && Object.keys(loopStates).length > 0) {
+        const title = document.createElement('h3');
+        title.textContent = '🧠 Cognitive Loops';
+        memoryDiv.appendChild(title);
+        
+        const loopContainer = document.createElement('div');
+        loopContainer.style.display = 'flex';
+        loopContainer.style.flexWrap = 'wrap';
+        loopContainer.style.gap = '4px';
+        loopContainer.style.marginBottom = '12px';
+        
+        for (const [loopName, loopData] of Object.entries(loopStates)) {
+          const loopBadge = document.createElement('span');
+          loopBadge.style.cssText = 'background: rgba(83,187,165,0.3); padding: 2px 6px; border-radius: 8px; font-size: 10px; cursor: pointer;';
+          loopBadge.textContent = loopName.replace(/_/g, ' ');
+          loopBadge.title = JSON.stringify(loopData, null, 2);
+          loopContainer.appendChild(loopBadge);
+        }
+        memoryDiv.appendChild(loopContainer);
+        hasContent = true;
+      }
+      
+      if (memories && memories.length) {
+        const title = document.createElement('h3');
+        title.textContent = '📚 Local Memory';
+        memoryDiv.appendChild(title);
+        memories.forEach(m => {
+          const item = document.createElement('div');
+          item.classList.add('memitem');
+          const date = new Date(m.timestamp).toLocaleString();
+          const content = m.content || '';
+          item.innerHTML = `<span>[${date}]</span> ${content.substring(0, 120)}${content.length > 120 ? '...' : ''}`;
+          memoryDiv.appendChild(item);
+        });
+        hasContent = true;
+      }
+      
+      if (snippets && snippets.length) {
+        const title = document.createElement('h3');
+        title.textContent = '🌐 Web Results';
+        memoryDiv.appendChild(title);
+        snippets.forEach(s => {
+          const item = document.createElement('div');
+          item.classList.add('memitem');
+          const safeTitle = s.title || '';
+          const safeBody = s.body || '';
+          item.innerHTML = `<span>${safeTitle}</span><br>${safeBody.substring(0, 80)}...`;
+          if (s.url) {
+            item.style.cursor = 'pointer';
+            item.onclick = () => window.open(s.url, '_blank');
+          }
+          memoryDiv.appendChild(item);
+        });
+        hasContent = true;
+      }
+      
+      if (!hasContent) {
+        memoryDiv.innerHTML = '<p style="color: #888; text-align: center; margin-top: 20px;">Context will appear here</p>';
+      }
+    }
+
+    // Send the user's message to the backend
+    async function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+      addMessage(text, 'user');
+      messageInput.value = '';
+      
+      // Add thinking indicator
+      const thinkingBubble = addMessage('⏳ Thinking...', 'assistant');
+      
+      try {
+        const payload = {
+          message: text,
+          mode: 'default',
+          model: modelSelect.value || undefined,
+          use_memory: memoryToggle.checked,
+          use_web: webToggle.checked,
+          use_tools: true
+        };
+        
+        console.log('Sending request:', payload);
+        
+        const response = await fetch(`${API_BASE}/chat`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(`Server error: ${response.status} - ${errText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Response:', data);
+        
+        // Remove thinking indicator
+        thinkingBubble.remove();
+        
+        // Type out response
+        typeResponse(data.answer);
+        
+        // Update memory panel
+        updateMemory(
+          data.memories || [], 
+          data.web_snippets || [], 
+          data.loop_states || {},
+          data.tools_used || []
+        );
+        
+        // Update affective state on the sphere
+        const sphere = document.getElementById('sphere');
+        if (sphere) {
+          sphere.classList.remove('positive', 'negative', 'neutral');
+          if (data.affective) sphere.classList.add(data.affective);
+        }
+        
+      } catch (err) {
+        console.error('Chat error:', err);
+        thinkingBubble.innerHTML = '❌ Error: ' + err.message;
+      }
+    }
+
+    // TTS Functions
+    async function loadTTSVoices() {
+      try {
+        const res = await fetch(`${API_BASE}/tts/voices`, { mode: 'cors' });
+        if (res.ok) {
+          const data = await res.json();
+          ttsVoices = data.voices || [];
+          
+          // Populate voice selector
+          voiceSelect.innerHTML = '';
+          
+          if (ttsVoices.length === 0) {
+            voiceSelect.innerHTML = '<option value="">TTS unavailable</option>';
+            return;
+          }
+          
+          // Group by locale
+          const byLocale = {};
+          ttsVoices.forEach(v => {
+            const locale = v.locale || 'Unknown';
+            if (!byLocale[locale]) byLocale[locale] = [];
+            byLocale[locale].push(v);
+          });
+          
+          // Add English voices first
+          const englishLocales = Object.keys(byLocale).filter(l => l.startsWith('en-')).sort();
+          const otherLocales = Object.keys(byLocale).filter(l => !l.startsWith('en-')).sort();
+          
+          [...englishLocales, ...otherLocales].forEach(locale => {
+            const group = document.createElement('optgroup');
+            group.label = locale;
+            byLocale[locale].forEach(v => {
+              const opt = document.createElement('option');
+              opt.value = v.short_name || v.name;
+              opt.textContent = `${v.short_name} (${v.gender})`;
+              if (v.short_name === 'en-US-AriaNeural') opt.selected = true;
+              group.appendChild(opt);
+            });
+            voiceSelect.appendChild(group);
+          });
+          
+          console.log(`Loaded ${ttsVoices.length} TTS voices`);
+        }
+      } catch (e) {
+        console.warn('TTS voices not available:', e);
+        voiceSelect.innerHTML = '<option value="">TTS unavailable</option>';
+      }
+    }
+
+    async function speakText(text) {
+      // Stop any currently playing audio
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+      
+      const voice = voiceSelect.value || 'en-US-AriaNeural';
+      if (!voice || voice === '') return;
+      
+      try {
+        // Clean text for TTS (remove markdown, limit length)
+        let cleanText = text
+          .replace(/\*\*/g, '')
+          .replace(/\*/g, '')
+          .replace(/`/g, '')
+          .replace(/#{1,6}\s/g, '')
+          .substring(0, 800);
+        
+        const res = await fetch(`${API_BASE}/tts/synthesize`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            text: cleanText, 
+            voice: voice,
+            rate: '+0%',
+            pitch: '+0Hz'
+          })
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          if (data.url) {
+            currentAudio = new Audio(`${API_BASE}${data.url}`);
+            currentAudio.play().catch(e => console.warn('Audio play failed:', e));
+          } else if (data.error) {
+            console.warn('TTS error:', data.error);
+          }
+        }
+      } catch (e) {
+        console.warn('TTS failed:', e);
+      }
+    }
+
+    // Bind events
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Load available models at startup
+    async function loadModels() {
+      try {
+        const res = await fetch(`${API_BASE}/models`, { mode: 'cors' });
+        if (!res.ok) return;
+        const data = await res.json();
+        modelSelect.innerHTML = '';
+        const models = data.models || [];
+        
+        if (models.length) {
+          models.forEach((m, i) => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m;
+            if (i === 0) opt.selected = true;
+            modelSelect.appendChild(opt);
+          });
+        } else {
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.disabled = true;
+          opt.textContent = 'No models – start Ollama';
+          modelSelect.appendChild(opt);
+        }
+      } catch (e) {
+        console.warn('Failed to load models:', e);
+        modelSelect.innerHTML = '<option value="">API offline</option>';
+      }
+    }
+    
+    // Load system stats
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API_BASE}/stats`, { mode: 'cors' });
+        if (res.ok) {
+          const stats = await res.json();
+          console.log('GPC3 Stats:', stats);
+          
+          // Update watermark with feature status
+          const features = stats.features || {};
+          const watermark = document.getElementById('watermark');
+          if (watermark) {
+            let statusIcons = '';
+            if (features.embeddings) statusIcons += '🧠';
+            if (features.faiss) statusIcons += '🔍';
+            if (features.ollama) statusIcons += '🤖';
+            if (features.web_search) statusIcons += '🌐';
+            if (features.tts) statusIcons += '🔊';
+            
+            watermark.innerHTML = `
+              <div style="font-weight: bold; color: #53bba5;">GPC3 ${statusIcons}</div>
+              <div>Claude Opus 4.5 × Ordis-GPT 5.1</div>
+            `;
+          }
+        }
+      } catch (e) {
+        console.warn('Stats not available:', e);
+      }
+    }
+    
+    // Check backend health
+    async function checkHealth() {
+      try {
+        const res = await fetch(`${API_BASE}/`, { mode: 'cors' });
+        if (res.ok) {
+          const data = await res.json();
+          console.log('Backend status:', data);
+          return true;
+        }
+      } catch (e) {
+        console.error('Backend offline:', e);
+        addMessage('⚠️ Backend offline. Start with: <code>python gpc3_core.py</code>', 'assistant');
+        return false;
+      }
+    }
+    
+    // Initialize
+    async function init() {
+      const online = await checkHealth();
+      if (online) {
+        await Promise.all([
+          loadModels(),
+          loadTTSVoices(),
+          loadStats()
+        ]);
+      }
+    }
+    init();
+
+    // Randomly apply one of the additional background animations
+    (function applyRandomBackground() {
+      const backgrounds = ['bg-waves', 'bg-stars', 'bg-aurora', 'bg-nebula', 'bg-ocean', 'bg-plasma'];
+      const choice = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+      document.body.classList.add(choice);
+    })();
+
+    // Handle file uploads
+    fileUpload.addEventListener('change', async function(e) {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+      
+      const form = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        form.append('files', files[i]);
+      }
+      
+      const uploadBubble = addMessage('📎 Uploading files...', 'assistant');
+      
+      try {
+        const res = await fetch(`${API_BASE}/files/upload`, {
+          method: 'POST',
+          mode: 'cors',
+          body: form
+        });
+        const data = await res.json();
+        
+        // Format results
+        const results = Object.entries(data.ingested || {}).map(([name, info]) => {
+          const fragments = info.fragments || 0;
+          const extracted = info.text_extracted ? '✓' : '✗';
+          return `<br>• ${name}: ${fragments} fragments (text: ${extracted})`;
+        }).join('');
+        
+        uploadBubble.innerHTML = `📎 Files processed:${results}`;
+        
+        if (results.includes('0 fragments')) {
+          uploadBubble.innerHTML += '<br><small style="color: #888;">Note: Images/binary files cannot be text-indexed</small>';
+        }
+      } catch (err) {
+        uploadBubble.innerHTML = '❌ Upload failed: ' + err.message;
+      } finally {
+        fileUpload.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
