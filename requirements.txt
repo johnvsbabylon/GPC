@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+numpy
+sentence-transformers
+faiss-cpu
+ollama
+python-docx
+PyPDF2
+odfpy
+Pillow
+pytesseract
+openpyxl
+python-pptx
+duckduckgo-search
+ddgs
+edge-tts
